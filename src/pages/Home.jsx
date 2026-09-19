@@ -11,6 +11,31 @@ const PRIMARY_LIGHTER = '#f0f5fa';
 const PRIMARY_BORDER = '#c5d8fb';
 const PRIMARY_TEXT_LIGHT = '#dbe8fa';
 
+const typeLabels = {
+  estagio: 'Estágio',
+  projeto: 'Projeto',
+  vaga: 'Vaga',
+};
+
+const typeColors = {
+  estagio: 'bg-green-100 text-green-700',
+  projeto: 'bg-blue-100 text-blue-700',
+  vaga: 'bg-yellow-100 text-yellow-700',
+};
+
+const typeBgColors = {
+  estagio: 'bg-green-50 border-green-100',
+  projeto: 'bg-blue-50 border-blue-100',
+  vaga: 'bg-yellow-50 border-yellow-100',
+};
+
+const eventTypeLabels = {
+  palestra: 'Palestra',
+  workshop: 'Workshop',
+  feira: 'Feira',
+  outro: 'Outro',
+};
+
 export default function Home() {
   const { user } = useAuth();
   const { opportunities, events } = useData();
@@ -98,6 +123,18 @@ export default function Home() {
     vaga: 'Vaga',
   };
 
+  const typeColors = {
+    estagio: 'bg-green-100 text-green-700',
+    projeto: 'bg-blue-100 text-blue-700',
+    vaga: 'bg-yellow-100 text-yellow-700',
+  };
+
+  const typeBgColors = {
+    estagio: 'bg-green-50 border-green-100',
+    projeto: 'bg-blue-50 border-blue-100',
+    vaga: 'bg-yellow-50 border-yellow-100',
+  };
+
   const eventTypeLabels = {
     palestra: 'Palestra',
     workshop: 'Workshop',
@@ -141,47 +178,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 -mt-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <article className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-3 mb-4">
-              <div className={`p-3 rounded-xl`} style={{backgroundColor: PRIMARY_LIGHT, color: PRIMARY}}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">Oportunidades Reais</h3>
-            </div>
-            <p className="text-gray-600">Vagas de estágio, projetos de IC e empregos juniores postados diretamente por empresas e professores da rede.</p>
-          </article>
-
-          <article className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-blue-100 rounded-xl text-blue-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">Eventos Acadêmicos</h3>
-            </div>
-            <p className="text-gray-600">Palestras, workshops, feiras de estágio e hackathons. Inscreva-se com um clique e receba lembretes.</p>
-          </article>
-
-          <article className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-green-100 rounded-xl text-green-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900">Conexão Direta</h3>
-            </div>
-            <p className="text-gray-600">Perfis separados para alunos e empresas/professores. Publique oportunidades ou candidate-se de forma simples.</p>
-          </article>
-        </div>
-      </section>
-
-      <section className="bg-white py-16">
+      <section className="bg-white py-16 -mt-16 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -196,9 +193,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeOpportunities.length > 0 ? (
               activeOpportunities.map(opp => (
-                <article key={opp.id} className={`bg-gray-50 rounded-xl p-5 border border-gray-100 hover:border-[${PRIMARY_BORDER}] hover:shadow-md transition-all`}>
+                <article key={opp.id} className={`rounded-xl p-5 border hover:shadow-md transition-all ${typeBgColors[opp.type] || 'bg-gray-50 border-gray-100'}`}>
                   <div className="flex items-start justify-between gap-2 mb-3">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full capitalize`} style={{backgroundColor: PRIMARY_LIGHT, color: PRIMARY_DARK}}>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${typeColors[opp.type]} capitalize`}>
                       {typeLabels[opp.type]}
                     </span>
                     <span className="text-xs text-gray-500 whitespace-nowrap">{opp.workload}</span>

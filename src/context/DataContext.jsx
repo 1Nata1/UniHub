@@ -258,20 +258,20 @@ const initialEvents = [
 
 export function DataProvider({ children }) {
   const [opportunities, setOpportunities] = useState(() => {
-    const saved = localStorage.getItem('unihub_opportunities');
+    const saved = localStorage.getItem('conectauni_opportunities');
     return saved ? JSON.parse(saved) : initialOpportunities;
   });
   const [events, setEvents] = useState(() => {
-    const saved = localStorage.getItem('unihub_events');
+    const saved = localStorage.getItem('conectauni_events');
     return saved ? JSON.parse(saved) : initialEvents;
   });
 
   useEffect(() => {
-    localStorage.setItem('unihub_opportunities', JSON.stringify(opportunities));
+    localStorage.setItem('conectauni_opportunities', JSON.stringify(opportunities));
   }, [opportunities]);
 
   useEffect(() => {
-    localStorage.setItem('unihub_events', JSON.stringify(events));
+    localStorage.setItem('conectauni_events', JSON.stringify(events));
   }, [events]);
 
   const addOpportunity = (opp) => {

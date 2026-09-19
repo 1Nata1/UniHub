@@ -26,6 +26,7 @@ export default function Profile() {
     semester: user.semester || '',
     externalCourses: user.externalCourses || '',
     competencies: user.competencies || '',
+    github: user.github || '',
     companyDescription: user.companyDescription || '',
     website: user.website || '',
     linkedin: user.linkedin || '',
@@ -76,18 +77,32 @@ export default function Profile() {
                 Perfil
               </button>
               {isStudent && (
-                <button
-                  role="tab"
-                  aria-selected={activeTab === 'events'}
-                  onClick={() => setActiveTab('events')}
-                  className={`px-6 py-3 text-sm font-medium rounded-t-lg transition-colors border-b-2 ${
-                    activeTab === 'events'
-                      ? `border-[${PRIMARY}] text-[${PRIMARY}]`
-                      : 'text-gray-500 hover:text-gray-700 border-transparent'
-                  }`}
-                >
-                  Meus Eventos ({user.registeredEvents?.length || 0})
-                </button>
+                <>
+                  <button
+                    role="tab"
+                    aria-selected={activeTab === 'events'}
+                    onClick={() => setActiveTab('events')}
+                    className={`px-6 py-3 text-sm font-medium rounded-t-lg transition-colors border-b-2 ${
+                      activeTab === 'events'
+                        ? `border-[${PRIMARY}] text-[${PRIMARY}]`
+                        : 'text-gray-500 hover:text-gray-700 border-transparent'
+                    }`}
+                  >
+                    Meus Eventos ({user.registeredEvents?.length || 0})
+                  </button>
+                  <button
+                    role="tab"
+                    aria-selected={activeTab === 'interviews'}
+                    onClick={() => setActiveTab('interviews')}
+                    className={`px-6 py-3 text-sm font-medium rounded-t-lg transition-colors border-b-2 ${
+                      activeTab === 'interviews'
+                        ? `border-[${PRIMARY}] text-[${PRIMARY}]`
+                        : 'text-gray-500 hover:text-gray-700 border-transparent'
+                    }`}
+                  >
+                    Entrevistas ({Object.values(JSON.parse(localStorage.getItem('conectauni_interviews') || '{}')).flatMap(o => Object.values(o)).filter(i => i.studentId === user.id).length || 0})
+                  </button>
+                </>
               )}
             </nav>
           </div>
@@ -191,6 +206,22 @@ export default function Profile() {
                         placeholder="JavaScript, React, Node.js&#10;Python, Pandas, SQL&#10;Git, Docker, AWS&#10;Inglês fluente, Espanhol intermediário"
                       />
                       <p className="mt-1 text-xs text-gray-500">Separe cada competência com Enter ou vírgula</p>
+                    </div>
+
+                    <div>
+                      <label htmlFor="github" className="block text-sm font-medium text-gray-700 mb-1">
+                        GitHub
+                      </label>
+                      <input
+                        id="github"
+                        name="github"
+                        type="url"
+                        value={form.github}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:border-[${PRIMARY}]`}
+                        placeholder="https://github.com/seuusuario"
+                      />
+                      <p className="mt-1 text-xs text-gray-500">Link do seu perfil do GitHub (visível para empresas)</p>
                     </div>
                   </>
                 ) : (
@@ -317,6 +348,71 @@ export default function Profile() {
                             >
                               Cancelar inscrição
                             </button>
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'interviews' && (
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">Minhas Entrevistas</h2>
+                
+                {(() => {
+                  const interviews = JSON.parse(localStorage.getItem('conectauni_interviews') || '{}');
+                  const userInterviews = [];
+                  Object.entries(interviews).forEach(([oppId, apps]) => {
+                    Object.entries(apps).forEach(([studentId, interview]) => {
+                      if (studentId === user.id) {
+                        userInterviews.push({ opportunityId: oppId, ...interview });
+                      }
+                    });
+                  });
+                  return userInterviews;
+                })().length === 0 ? (
+                  <div className="text-center py-12">
+                    <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <h3 className="text-lg font-medium text-gray-900 mb-1">Nenhuma entrevista agendada</h3>
+                    <p className="text-gray-500 mb-6">Quando uma empresa agendar uma entrevista com você, ela aparecerá aqui.</p>
+                    <Link to="/oportunidades" className={`inline-flex items-center gap-2 px-6 py-3 font-medium rounded-lg transition-colors hover:bg-[${PRIMARY_DARK}]`} style={{backgroundColor: PRIMARY, color: 'white'}}>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                      Ver oportunidades
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4" role="list">
+                    {(() => {
+const interviews = JSON.parse(localStorage.getItem('conectauni_interviews') || '{}');
+                      const userInterviews = [];
+                      Object.entries(interviews).forEach(([oppId, apps]) => {
+                        Object.entries(apps).forEach(([studentId, interview]) => {
+                          if (studentId === user.id) {
+                            userInterviews.push({ opportunityId: oppId, ...interview });
+                          }
+                        });
+                      });
+                      return userInterviews.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    })().map(interview => (
+                      <article key={interview.opportunityId + interview.date} className={`bg-white rounded-xl p-5 border border-gray-100 hover:border-[${PRIMARY_BORDER}] hover:shadow-md transition-all`} role="listitem">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                              <span className="px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">Entrevista Agendada</span>
+                              <time className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700" dateTime={interview.date}>
+                                {new Date(interview.date).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })} às {interview.time}
+                              </time>
+                            </div>
+                            <h3 className="font-semibold text-gray-900 mb-1">Entrevista para Estágio/Vaga</h3>
+                            <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L12 22.314l-5.657-5.657M12 22.314V4.314" /></svg>
+                              {interview.location}
+                            </p>
+                            {interview.notes && <p className="text-sm text-gray-500 mb-2"><strong>Observações:</strong> {interview.notes}</p>}
                           </div>
                         </div>
                       </article>

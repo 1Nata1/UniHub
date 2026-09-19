@@ -16,9 +16,15 @@ const typeLabels = {
 };
 
 const typeColors = {
-  estagio: `bg-[${PRIMARY_LIGHT}] text-[${PRIMARY_DARK}]`,
+  estagio: 'bg-green-100 text-green-700',
   projeto: 'bg-blue-100 text-blue-700',
-  vaga: 'bg-green-100 text-green-700',
+  vaga: 'bg-yellow-100 text-yellow-700',
+};
+
+const typeBgColors = {
+  estagio: 'bg-green-50 border-green-100',
+  projeto: 'bg-blue-50 border-blue-100',
+  vaga: 'bg-yellow-50 border-yellow-100',
 };
 
 export default function Opportunities() {
@@ -127,7 +133,7 @@ export default function Opportunities() {
             {filteredOpportunities.length > 0 ? (
               <div className="space-y-4" role="list" aria-label="Lista de oportunidades">
                 {filteredOpportunities.map(opp => (
-                  <article key={opp.id} className={`bg-white rounded-xl p-5 border border-gray-100 hover:border-[${PRIMARY_BORDER}] hover:shadow-md transition-all`} role="listitem">
+                  <article key={opp.id} className={`rounded-xl p-5 border hover:shadow-md transition-all ${typeBgColors[opp.type] || 'bg-gray-50 border-gray-100'}`} role="listitem">
                     <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className={`px-3 py-1 text-xs font-medium rounded-full ${typeColors[opp.type]} capitalize`}>

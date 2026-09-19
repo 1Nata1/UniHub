@@ -114,7 +114,7 @@ function AppLayout() {
       </main>
       <footer className="bg-white border-t border-gray-200 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-          <p>UniHub - Conectando estudantes a oportunidades</p>
+          <p>ConectaUni - Conectando estudantes a oportunidades</p>
           <p className="mt-1">Desenvolvido para a comunidade universitária</p>
         </div>
       </footer>

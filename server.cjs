@@ -94,7 +94,7 @@ function serveFile(filePath, res) {
 }
 
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`UniHub rodando em http://127.0.0.1:${PORT}`);
+  console.log(`ConectaUni rodando em http://127.0.0.1:${PORT}`);
   console.log('Pressione Ctrl+C para parar');
 });
 
