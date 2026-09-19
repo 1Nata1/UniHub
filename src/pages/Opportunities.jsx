@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
+import { SkeletonOpportunityCard, SkeletonDetail } from '../components/Skeleton';
 
 const PRIMARY = '#002F85';
 const PRIMARY_DARK = '#00256e';
@@ -29,6 +30,12 @@ export default function Opportunities() {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [locationFilter, setLocationFilter] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredOpportunities = useMemo(() => {
     return opportunities
@@ -47,6 +54,24 @@ export default function Opportunities() {
   }, [opportunities, search, typeFilter, locationFilter]);
 
   if (params.id) return <OpportunityDetail opportunityId={params.id} />;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Oportunidades</h1>
+            <p className="text-gray-600 mt-1">Encontre estágios, projetos e vagas ideais para você</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Carregando oportunidades">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonOpportunityCard key={i} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

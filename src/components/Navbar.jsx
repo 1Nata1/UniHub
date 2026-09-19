@@ -23,7 +23,7 @@ export default function Navbar() {
     { path: '/oportunidades', label: 'Oportunidades' },
     { path: '/eventos', label: 'Eventos' },
     { path: '/perfil', label: 'Meu Perfil' },
-  ] : [
+  ] : user?.type === 'company' || user?.type === 'professor' ? [
     { path: '/', label: 'Início' },
     { path: '/minhas-oportunidades', label: 'Minhas Oportunidades' },
     { path: '/meus-eventos', label: 'Meus Eventos' },
@@ -31,6 +31,10 @@ export default function Navbar() {
     { path: '/nova-oportunidade', label: 'Nova Oportunidade' },
     { path: '/novo-evento', label: 'Novo Evento' },
     { path: '/perfil', label: 'Meu Perfil' },
+  ] : [
+    { path: '/', label: 'Início' },
+    { path: '/oportunidades', label: 'Oportunidades' },
+    { path: '/eventos', label: 'Eventos' },
   ];
 
   return (

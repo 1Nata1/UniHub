@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
+import { useState, useEffect } from 'react';
+import { SkeletonOpportunityCard, SkeletonEventCard } from '../components/Skeleton';
 
 const PRIMARY = '#002F85';
 const PRIMARY_DARK = '#00256e';
@@ -12,9 +14,83 @@ const PRIMARY_TEXT_LIGHT = '#dbe8fa';
 export default function Home() {
   const { user } = useAuth();
   const { opportunities, events } = useData();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const activeOpportunities = opportunities.filter(o => o.active).slice(0, 3);
   const activeEvents = events.filter(e => e.active).slice(0, 3);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <section className="relative overflow-hidden" style={{background: `linear-gradient(to bottom right, ${PRIMARY}, ${PRIMARY_DARK}, #1e3a8a)`}}>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
+            <div className="max-w-3xl animate-pulse space-y-4">
+              <div className="h-8 w-3/4 bg-white/20 rounded" />
+              <div className="h-4 w-1/2 bg-white/20 rounded" />
+              <div className="h-4 w-1/3 bg-white/20 rounded" />
+            </div>
+          </div>
+        </section>
+
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 -mt-16 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 space-y-3">
+                <div className="h-10 w-24 bg-gray-200 rounded-xl" />
+                <div className="h-6 w-3/4 bg-gray-200 rounded" />
+                <div className="h-4 w-full bg-gray-200 rounded" />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="bg-white py-16 animate-pulse">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <div className="space-y-2">
+                <div className="h-6 w-48 bg-gray-200 rounded" />
+                <div className="h-4 w-64 bg-gray-200 rounded" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <SkeletonOpportunityCard key={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-50 py-16 animate-pulse">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-8">
+              <div className="space-y-2">
+                <div className="h-6 w-56 bg-gray-200 rounded" />
+                <div className="h-4 w-72 bg-gray-200 rounded" />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <SkeletonEventCard key={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="text-white text-center animate-pulse" style={{backgroundColor: PRIMARY}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="h-8 w-64 bg-white/20 rounded mx-auto mb-4" />
+            <div className="h-4 w-80 bg-white/20 rounded mx-auto mb-8" />
+            <div className="h-10 w-48 bg-white/20 rounded mx-auto" />
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   const typeLabels = {
     estagio: 'Estágio',
@@ -217,9 +293,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Pronto para começar?</h2>
           <p className={`mb-8 max-w-2xl mx-auto`} style={{color: PRIMARY_TEXT_LIGHT}}>Junte-se a milhares de estudantes e empresas conectadas. É gratuito para alunos.</p>
-          <button onClick={() => document.querySelector('header button')?.click()} className={`px-8 py-3 font-medium rounded-lg text-lg transition-colors hover:bg-gray-100`} style={{backgroundColor: 'white', color: PRIMARY}}>
-            Criar minha conta grátis
-          </button>
+          {!user && (
+            <button onClick={() => document.querySelector('header button')?.click()} className={`px-8 py-3 font-medium rounded-lg text-lg transition-colors hover:bg-gray-100`} style={{backgroundColor: 'white', color: PRIMARY}}>
+              Criar minha conta grátis
+            </button>
+          )}
+          {user && (
+            <Link to={user.type === 'student' ? '/oportunidades' : '/nova-oportunidade'} className={`inline-block px-8 py-3 font-medium rounded-lg text-lg transition-colors hover:bg-gray-100`} style={{backgroundColor: 'white', color: PRIMARY}}>
+              {user.type === 'student' ? 'Ver Oportunidades' : 'Publicar Oportunidade'}
+            </Link>
+          )}
         </div>
       </section>
     </div>
